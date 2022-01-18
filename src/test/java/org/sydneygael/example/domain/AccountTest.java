@@ -48,5 +48,15 @@ class AccountTest {
                 .isInstanceOf(RuntimeException.class);
     }
 
+    @Test
+    void should_deposit_20_and_withdrawal_10_from_account_with_0_balance(){
+        Account account = new Account(new Balance(BigDecimal.ZERO));
+
+        account.deposit(new Amount(new BigDecimal(20)));
+        account.withdrawal(new Amount(BigDecimal.TEN));
+
+        assertThat(new Balance(BigDecimal.TEN)).isEqualTo(account.balance());
+    }
+
 
 }

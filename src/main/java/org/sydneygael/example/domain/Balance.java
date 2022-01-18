@@ -11,4 +11,8 @@ public record Balance(BigDecimal value) {
     public static Balance of(BigDecimal value) {
         return new Balance(value);
     }
+
+    public Balance subtract(Amount amount) {
+        return new Balance(value.subtract(amount.value()));
+    }
 }

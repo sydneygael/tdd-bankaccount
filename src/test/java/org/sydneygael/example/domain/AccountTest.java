@@ -31,5 +31,12 @@ class AccountTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void should_withdraw_10_balance_of_10_when_withdraw_an_amount_of_10() {
+        Account account = new Account(new Balance(BigDecimal.valueOf(12)));
+        account.withdrawal(new Amount(BigDecimal.TEN));
+        assertThat(account.balance()).isEqualTo(Balance.of(BigDecimal.valueOf(2)));
+    }
+
 
 }

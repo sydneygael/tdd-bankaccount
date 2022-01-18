@@ -18,6 +18,15 @@ class BalanceTest {
     }
 
     @Test
+    void should_subsctract_ten_to_balance_with_zero_value(){
+        Balance balance = new Balance(BigDecimal.TEN);
+
+        Balance newBalance = balance.subtract(new Amount(BigDecimal.ONE));
+
+        assertThat(BigDecimal.valueOf(9)).isEqualTo(newBalance.value());
+    }
+
+    @Test
     void should_return_balance_of_ten_value(){
         Balance balance = Balance.of(BigDecimal.TEN);
 

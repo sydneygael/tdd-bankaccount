@@ -32,10 +32,20 @@ class AccountTest {
     }
 
     @Test
-    void should_withdraw_10_balance_of_10_when_withdraw_an_amount_of_10() {
+    void should_withdraw_10_balance_of_10_when_withdraw_an_amount_of_12() {
         Account account = new Account(new Balance(BigDecimal.valueOf(12)));
         account.withdrawal(new Amount(BigDecimal.TEN));
         assertThat(account.balance()).isEqualTo(Balance.of(BigDecimal.valueOf(2)));
+    }
+
+    @Test
+    void should_not_be_able_to_withdrawal_when_the_balance_amount_is_less_than_the_withdrawal() {
+
+        assertThatThrownBy(() -> {
+            Account account = new Account(new Balance(BigDecimal.ONE));
+            account.withdrawal(new Amount(BigDecimal.TEN));
+        })
+                .isInstanceOf(RuntimeException.class);
     }
 
 

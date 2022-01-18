@@ -19,7 +19,7 @@ class AmountTest {
     @Test
     void should_throw_illegal_argument_exception() {
         assertThatThrownBy(() -> {
-            Amount amount = new Amount(BigDecimal.TEN.negate());
+            new Amount(BigDecimal.TEN.negate());
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -17,6 +17,10 @@ public class Account {
     }
 
     public void withdrawal(Amount amount) {
-        balance = balance.subtract(amount);
+        Balance afterOperation = balance.subtract(amount);
+        if (afterOperation.isNegative()) {
+            throw new RuntimeException("Cannot do Operation because balance is not enough");
+        }
+        balance = afterOperation;
     }
 }

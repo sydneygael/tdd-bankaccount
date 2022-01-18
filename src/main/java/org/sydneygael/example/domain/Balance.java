@@ -15,4 +15,8 @@ public record Balance(BigDecimal value) {
     public Balance subtract(Amount amount) {
         return new Balance(value.subtract(amount.value()));
     }
+
+    public boolean isNegative() {
+        return value.signum() == -1;
+    }
 }

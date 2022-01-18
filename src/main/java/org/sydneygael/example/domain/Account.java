@@ -1,5 +1,7 @@
 package org.sydneygael.example.domain;
 
+import infra.StatementPrinter;
+
 import java.time.Clock;
 import java.time.LocalDateTime;
 
@@ -43,5 +45,9 @@ public class Account {
         }
         balance = afterOperation;
         statement.add(new Operation(OperationType.WITHDRAW, amount, LocalDateTime.now(clock)), afterOperation);
+    }
+
+    public void print(StatementPrinter statementPrinter) {
+        statement.print(statementPrinter);
     }
 }

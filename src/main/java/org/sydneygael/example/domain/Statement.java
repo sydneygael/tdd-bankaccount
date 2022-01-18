@@ -1,5 +1,7 @@
 package org.sydneygael.example.domain;
 
+import infra.StatementPrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,5 +15,9 @@ public class Statement {
 
     public List<StatementLine> statementLines() {
         return statementLines;
+    }
+
+    public void print(StatementPrinter statementPrinter) {
+        statementPrinter.print(this);
     }
 }

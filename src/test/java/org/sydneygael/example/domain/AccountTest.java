@@ -1,15 +1,21 @@
 package org.sydneygael.example.domain;
 
+import infra.ConsoleConsumerPrinter;
+import infra.StatementPrinter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -92,6 +98,42 @@ class AccountTest {
         //assert
         verify(statement,times(1)).add(new Operation(OperationType.DEPOSIT,depositAmount, LocalDateTime.now(clock)),Balance.of(depositValue));
         verify(statement,times(1)).add(new Operation(OperationType.WITHDRAW,withdrawAmount, LocalDateTime.now(clock)),Balance.of(balanceValue));
+    }
+
+    @Test
+    void shloud_print_all_satements() {
+        //prepare
+        String instantExpected = "2022-01-18T16:15:30Z";
+        Clock clock = Clock.fixed(Instant.parse(instantExpected), ZoneId.of("UTC"));
+        Account account = new Account(new Balance(BigDecimal.ZERO),clock,statement);
+        BigDecimal depositValue = BigDecimal.valueOf(100);
+        Amount depositAmount = new Amount(depositValue);
+        BigDecimal withdrawValue = BigDecimal.valueOf(20);
+        Amount withdrawAmount = new Amount(withdrawValue);
+        BigDecimal balanceValue = depositValue.add(withdrawValue.negate());
+
+        StatementPrinter statementPrinter = new FakeStatementPrinter();
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        //act
+        account.deposit(depositAmount);
+        account.withdrawal(withdrawAmount);
+        account.print(statementPrinter);
+
+        assertThat("""
+                | OPERATION | DATE | AMOUNT | BALANCE |
+                | DEPOSIT | 2022-01-18 16:15 | 100 | 100 |
+                | WITHDRAW | 2022-01-18 16:15 | 20 | 80 |
+                """).isEqualTo(outContent.toString());
+    }
+
+    private static class FakeStatementPrinter implements StatementPrinter {
+
+        @Override
+        public void print(Statement statement) {
+            new ConsoleConsumerPrinter().accept(statement);
+        }
     }
 
 
